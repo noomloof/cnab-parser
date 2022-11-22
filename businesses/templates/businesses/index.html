@@ -1,0 +1,73 @@
+{% load static %} {% load period_to_comma %}
+<link
+  rel="preconnect"
+  href="https://fonts.googleapis.com"
+/>
+<link
+  rel="preconnect"
+  href="https://fonts.gstatic.com"
+  crossorigin
+/>
+<link
+  href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+  rel="stylesheet"
+/>
+<link
+  rel="stylesheet"
+  href="{% static 'businesses/styles.css' %}"
+/>
+
+<body>
+    <div class="upperBlockBackground">
+
+        <div class="upperBlock">
+            <div class="title">
+                <h1><span id="cnab">CNAB</span> <span id="parser"> Parser</span></h1>
+            </div>
+            <div class="instructions">
+                <p>1. Select a <i>.txt</i> file with <b>CNAB</b> statements</p>
+                <p>2. Each line of the document <b>must</b> be a separate CNAB statement </p>
+                <p>3. Finally, send said file. We'll parse it and display the information to you!</p>
+                <p class="detail">Line example: 3201903010000019200845152540736777****1313172712MARCOS PEREIRAMERCADO DA AVENIDA</p>
+            </div>
+            <div class="formBlock">
+                <form
+                action="."
+                method="post"
+                enctype="multipart/form-data"
+                >
+                {% csrf_token %} {{ form }} <br /><br />
+                
+                <input id="submitButton" type="submit" value="Send" />
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="lowerBlockBackground" >
+
+        <div class="lowerBlock">
+            <h1>All registered transactions</h1>
+            {% for business in businesses %}
+            <h2>Business: {{ business.business_name }} </h2>
+            <h3>Business owner: {{ business.owner_name }}</h3>
+            <h3> Current balance: <span class="value">R$ {{ business.balance|period_to_comma }}</span></h2>
+                
+                <table>
+                    <tr>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Value</th>
+                    </tr>
+                    {% for transaction in business.transactions.all %}
+                    <tr>
+                        <td>{{ transaction.type }}</td>
+                        <td class="description">{{ transaction.description }}</td>
+                        <td class="value">R$ {{ transaction.value|period_to_comma }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            <hr class="separator" />
+            {% endfor %}
+        </div>
+    </div>
+</body>
