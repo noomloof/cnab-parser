@@ -41,3 +41,5 @@ Linux - `source venv/bin/activate`
 ### If you'd like to run it on Docker, run:
 
 `docker-compose up`
+
+OBSERVATION: Application may not work in `http://0.0.0.0:8000` through Docker, simply change it to either `http://127.0.0.1:8000`, or `http://localhost:8000`.
